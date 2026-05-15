@@ -18,7 +18,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // 16 KB page size support — extract native libs so alignment is not required
         androidResources {
             noCompress += listOf("tflite")
         }
@@ -45,8 +44,6 @@ android {
     }
     packaging {
         jniLibs {
-            // Default (compressed) packaging extracts libs at install time.
-            // This avoids 16 KB page-size alignment requirements for prebuilt .so files.
             pickFirsts += listOf("**/libandroidx.graphics.path.so")
         }
     }

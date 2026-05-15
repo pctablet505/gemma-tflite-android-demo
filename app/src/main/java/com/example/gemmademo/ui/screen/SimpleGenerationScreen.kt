@@ -79,7 +79,7 @@ import kotlinx.coroutines.withContext
 
 /**
  * Minimal generation screen: prompt input, generate button, output.
- * Hardcoded: GreedySampler, maxLength=32, model=gemma3_270m_tf.tflite, stripPrompt=true.
+ * Hardcoded: GreedySampler, maxLength=32, model=gemma3_270m_it_tf.tflite, stripPrompt=true.
  * Keeps animations, theme, and visual design from the full app.
  */
 @Composable
@@ -446,7 +446,7 @@ private fun generate(
         val resultText = withContext(Dispatchers.IO) {
             try {
                 val tokenizer = GemmaTokenizer(context)
-                val engine = InferenceEngine(context, "gemma3_270m_tf.tflite")
+                val engine = InferenceEngine(context, "gemma3_270m_it_tf.tflite")
                 engine.generate(
                     tokenizer = tokenizer,
                     prompt = prompt,

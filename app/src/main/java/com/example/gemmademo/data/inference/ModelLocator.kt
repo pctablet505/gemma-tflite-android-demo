@@ -15,7 +15,7 @@ object ModelLocator {
 
     private const val VOCAB_FILENAME = "vocabulary.spm"
 
-    fun findModelFile(context: Context, filename: String = "gemma3_270m.tflite"): File? {
+    fun findModelFile(context: Context, filename: String = "gemma3_270m_it_tf.tflite"): File? {
         val file = File(context.getExternalFilesDir(null), filename)
         return if (file.exists() && file.canRead()) file else null
     }

@@ -13,7 +13,7 @@ import java.nio.channels.FileChannel
  * Low-level TFLite inference for the Gemma model.
  * Uses signature runner for named inputs/outputs.
  */
-class InferenceEngine(context: Context, private val modelFilename: String = "gemma3_270m.tflite") {
+class InferenceEngine(context: Context, private val modelFilename: String = "gemma3_270m_it_tf.tflite") {
 
     private val modelFile: File? = ModelLocator.findModelFile(context, modelFilename)
 

@@ -23,7 +23,7 @@ class GemmaTokenizer(context: Context) {
     init {
         val modelFile = ModelLocator.findVocabFile(context)
         require(modelFile != null) {
-            "vocabulary.spm not found. Please push it to /sdcard/Download/gemmademo/ or the app external files dir."
+            "vocabulary.spm not found. Push to: /sdcard/Android/data/com.example.gemmademo/files/"
         }
         processor.loadOrDie(modelFile.absolutePath)
         vocabSize = processor.pieceSize

@@ -16,7 +16,7 @@ class InferenceEngineTest {
         val tokenizer = GemmaTokenizer(context)
         val sampler = GreedySampler()
 
-        for (modelFile in listOf("gemma3_270m_torch.tflite", "gemma3_270m_tf.tflite")) {
+        for (modelFile in listOf("gemma3_270m_it_tf.tflite")) {
             val engine = InferenceEngine(context, modelFile)
             val result = engine.generate(
                 tokenizer, "What is Keras?",
