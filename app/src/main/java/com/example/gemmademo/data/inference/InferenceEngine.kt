@@ -2,12 +2,12 @@ package com.example.gemmademo.data.inference
 
 import android.content.Context
 import android.util.Log
-import com.example.gemmademo.data.sampler.Sampler
+
 import org.tensorflow.lite.Interpreter
 import java.io.File
 import java.io.FileInputStream
-import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
+
 
 /**
  * Low-level TFLite inference for the Gemma model.
@@ -23,7 +23,6 @@ class InferenceEngine(context: Context, private val modelFilename: String = "gem
      * @param tokenizer Already-loaded tokenizer.
      * @param prompt Raw user prompt.
      * @param maxLength Max tokens to generate.
-     * @param sampler Sampling strategy.
      * @param stripPrompt If true, remove prompt tokens from the returned string.
      * @return Generated text, or an error message prefixed with "Error:".
      */
@@ -31,7 +30,6 @@ class InferenceEngine(context: Context, private val modelFilename: String = "gem
         tokenizer: GemmaTokenizer,
         prompt: String,
         maxLength: Int,
-        sampler: Sampler,
         stripPrompt: Boolean
     ): String {
         if (modelFile == null) {
@@ -40,7 +38,7 @@ class InferenceEngine(context: Context, private val modelFilename: String = "gem
 
         val interpreter = createInterpreter()
         return try {
-            runGeneration(interpreter, tokenizer, prompt, maxLength, sampler, stripPrompt)
+            runGeneration(interpreter, tokenizer, prompt, maxLength, stripPrompt)
         } catch (e: Exception) {
             Log.e(TAG, "Generation failed", e)
             "Error: ${e.message}"
@@ -72,7 +70,6 @@ class InferenceEngine(context: Context, private val modelFilename: String = "gem
         tokenizer: GemmaTokenizer,
         prompt: String,
         maxLength: Int,
-        sampler: Sampler,
         stripPrompt: Boolean
     ): String {
         val bosTokenId = tokenizer.bosId
@@ -154,8 +151,14 @@ class InferenceEngine(context: Context, private val modelFilename: String = "gem
             interpreter.runSignature(inputs, outputs, "serving_default")
 
             val logits = outputBuffer[0][currentLength - 1]
-            val probabilities = sampler.computeProbabilities(logits)
-            val nextTokenId = sampler.getNextToken(probabilities)
+            var nextTokenId = 0
+            var maxLogit = logits[0]
+            for (i in 1 until logits.size) {
+                if (logits[i] > maxLogit) {
+                    maxLogit = logits[i]
+                    nextTokenId = i
+                }
+            }
 
             if (nextTokenId in stopTokens) break
 
