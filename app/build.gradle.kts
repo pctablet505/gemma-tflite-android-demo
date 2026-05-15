@@ -45,8 +45,9 @@ android {
     }
     packaging {
         jniLibs {
-            useLegacyPackaging = true
-            keepDebugSymbols += listOf("*/arm64-v8a/libsentencepiece_jni.so")
+            // Default (compressed) packaging extracts libs at install time.
+            // This avoids 16 KB page-size alignment requirements for prebuilt .so files.
+            pickFirsts += listOf("**/libandroidx.graphics.path.so")
         }
     }
 }
