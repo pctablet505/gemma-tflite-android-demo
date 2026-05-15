@@ -50,6 +50,13 @@ def find_apksigner() -> str | None:
     """Find apksigner in Android SDK build-tools."""
     android_home = os.environ.get("ANDROID_HOME") or os.environ.get("ANDROID_SDK")
     if not android_home:
+        # Fallback to common default locations
+        home = os.path.expanduser("~")
+        for candidate in [os.path.join(home, "Android", "Sdk")]:
+            if os.path.isdir(candidate):
+                android_home = candidate
+                break
+    if not android_home:
         return None
     build_tools = os.path.join(android_home, "build-tools")
     if not os.path.isdir(build_tools):
