@@ -17,7 +17,12 @@ adb push gemma3_270m_tf.tflite /sdcard/Android/data/com.example.gemmademo/files/
 adb push gemma3_270m_hf/assets/tokenizer/vocabulary.spm /sdcard/Android/data/com.example.gemmademo/files/
 ```
 
-3. Build and install:
+3. Set Android SDK path in `local.properties` (create if missing):
+```bash
+echo "sdk.dir=/path/to/Android/Sdk" > local.properties
+```
+
+4. Build and install:
 ```bash
 ./gradlew assembleDebug
 adb install -r app/build/outputs/apk/debug/app-debug.apk
